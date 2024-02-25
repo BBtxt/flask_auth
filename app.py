@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, request, session
 from models import db, connect_db, Users
-from forms import RegisterForm
+from forms import LoginForm, RegisterForm
 from werkzeug.exceptions import Unauthorized
 import logging
 
@@ -36,7 +36,7 @@ def register():
         # push validated data to database
         user = Users.register(username, password, email, first_name, last_name)
         db.session.commit()
-        session['user_id'] = user.id
+        session['username'] = user.username
         
         return redirect('/users/<username>')
     else:
@@ -51,6 +51,25 @@ def user_dashboard(username):
     user = Users.query.get_or_404(session['user_id'])
     return render_template('/users/dashboard.html', user=user)
 
+@app.route('/login', methods=['GET', 'POST'])   
+def login():
+    if "username" in session:
+        return redirect(f'/users/{session["username"]}')
+    
+    form = LoginForm()
+    
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        
+        user = Users.authenticate(username, password)
+        
+        if user:
+            session['username'] = user.username
+            return redirect(f'/users/{user.username}')
+        else:
+            form.username.errors = ['Invalid username/password']
+    return render_template('/users/login.html', form=form)
 
 
 if __name__ == '__main__':
