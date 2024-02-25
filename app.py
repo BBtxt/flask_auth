@@ -108,7 +108,7 @@ def update_feedback(feedback_id):
         feedback.content = form.content.data
         db.session.commit()
         return redirect(f'/users/{feedback.username}')
-    return render_template('/feedback/update_feedback.html', form=form)
+    return render_template('/feedback/edit_feedback.html', form=form)
 
 @app.route('/feedback/<int:feedback_id>/delete', methods=['GET', 'POST'])
 def delete_feedback(feedback_id):
