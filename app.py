@@ -1,5 +1,5 @@
 from flask import Flask, redirect, render_template, request, session
-from models import db, connect_db, Users
+from models import db, connect_db, Users, Feedback
 from forms import LoginForm, RegisterForm
 from werkzeug.exceptions import Unauthorized
 import logging
@@ -50,7 +50,8 @@ def user_dashboard(username):
         raise Unauthorized()
 
     user = Users.query.filter_by(username=username).first()
-    return render_template('/users/dashboard.html', user=user)
+    feedback = Feedback.query.filter_by(username=username).all()
+    return render_template('/users/dashboard.html', user=user , feedback=feedback)
 
 @app.route('/login', methods=['GET', 'POST'])   
 def login():

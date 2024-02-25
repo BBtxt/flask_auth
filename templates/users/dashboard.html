@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div>
-    Hey check it out you logged in as {{ user.username }}
+<div class="flex flex-col gap-6">
+    <h1 class="text-2xl">Welcome <span class="font-bold">{{ user.username }}</span></h1>
+    {% if feedback %}
+        <p class="text-red-500">{{ feedback }}</p>
+    {% else %}
+    <div>
+        <p>You haven't left any feed bck yet</p>
+        <p>Click Here to: <span><a href="/feedback">Leave Feedback</a></span></p>
+    </div>
+    {% endif %}
+
     <a href="/logout">Logout</a>
 </div>
 {% endblock %}
