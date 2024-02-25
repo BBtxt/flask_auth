@@ -96,6 +96,31 @@ def add_feedback(username):
         return redirect(f'/users/{username}')
     return render_template('/feedback/add_feedback.html', form=form) 
 
+@app.route('/feedback/<int:feedback_id>/update', methods=['GET', 'POST'])  
+def update_feedback(feedback_id):
+    feedback = Feedback.query.get_or_404(feedback_id)
+    if "username" not in session or feedback.username != session['username']:
+        raise Unauthorized()
+    
+    form = FeedbackForm(obj=feedback)
+    if form.validate_on_submit():
+        feedback.title = form.title.data
+        feedback.content = form.content.data
+        db.session.commit()
+        return redirect(f'/users/{feedback.username}')
+    return render_template('/feedback/update_feedback.html', form=form)
+
+@app.route('/feedback/<int:feedback_id>/delete', methods=['GET', 'POST'])
+def delete_feedback(feedback_id):
+    feedback = Feedback.query.get_or_404(feedback_id)
+    if "username" not in session or feedback.username != session['username']:
+        raise Unauthorized()
+    
+    db.session.delete(feedback)
+    db.session.commit()
+    return redirect(f'/users/{session["username"]}')
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
