@@ -4,14 +4,40 @@
 <div class="flex flex-col gap-6">
     <h1 class="text-2xl">Welcome <span class="font-bold">{{ user.username }}</span></h1>
     {% if feedback %}
-        <p class="text-red-500">{{ feedback }}</p>
+        <div>
+            {% for feed in feedback %}
+                <div class="flex flex-col gap-2">
+                    <p>Title: {{ feed.title }}</p>
+                    <p>Content: {{ feed.content }}</p>
+                </div>
+            {% endfor %}
+        </div>
+            <div class=" flex gap-4">
+                <a href="">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Edit
+            </button>
+        </a>
+            <a href="">
+                <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Delete
+                </button>
+            </a></div>
+        </div>
+
     {% else %}
     <div>
         <p>You haven't left any feed bck yet</p>
-        <p>Click Here to: <span><a href="/feedback">Leave Feedback</a></span></p>
+        <p>Click Here to: <span><a href="/users/{{ user.username }}/feedback/add">Leave Feedback</a></span></p>
     </div>
     {% endif %}
-
-    <a href="/logout">Logout</a>
+<div class="py-4">
+    
+        <a href="/logout">
+            <button class="bg-green-500 hover:bg-green-300 text-white font-bold py-2 px-4 rounded">
+                Logout
+            </button>
+        </a>
+</div>
 </div>
 {% endblock %}

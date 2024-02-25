@@ -1,15 +1,23 @@
-{% extends "base.html" %} 
-{% block content %}
-<h2>Login</h2>
+{% extends "base.html" %} {% block content %}
+<h2 class="text-4xl pb-8">Login</h2>
 <div>
-  <form method="POST">
-    {{ form.hidden_tag() }} {% for field in form %}
+  <form method="POST" class="flex flex-col gap-6">
+    {{ form.hidden_tag() }}
+    {% for field in form %}
+    {% if field.type != "CSRFTokenField" %}
     <span>
       {{ field.label }} {{ field }} {% for error in field.errors %} {{ error }}
       {% endfor %}
     </span>
+    {% endif %}
     {% endfor %}
-    <button type="submit">Login</button>
+    <button type="submit">
+      <button
+        class="bg-green-500 hover:bg-green-300 text-white font-bold py-2 px-4 rounded"
+      >
+        Login
+      </button>
+    </button>
   </form>
 </div>
 {% endblock %}

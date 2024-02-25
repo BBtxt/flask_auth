@@ -1,6 +1,6 @@
 from flask import Flask, redirect, render_template, request, session
 from models import db, connect_db, Users, Feedback
-from forms import LoginForm, RegisterForm
+from forms import FeedbackForm, LoginForm, RegisterForm
 from werkzeug.exceptions import Unauthorized
 import logging
 
@@ -79,7 +79,22 @@ def logout():
     session.pop('username')
     return redirect('/')
 
+# ***************FEEDBACK ROUTES****************
 
+@app.route('/users/<username>/feedback/add', methods=['GET', 'POST'])
+def add_feedback(username):
+    if "username" not in session or username != session['username']:
+        raise Unauthorized()
+
+    form = FeedbackForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
+        feedback = Feedback(title=title, content=content, username=username)
+        db.session.add(feedback)
+        db.session.commit()
+        return redirect(f'/users/{username}')
+    return render_template('/feedback/add_feedback.html', form=form) 
 
 if __name__ == '__main__':
     with app.app_context():
