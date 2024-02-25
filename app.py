@@ -35,6 +35,7 @@ def register():
         last_name = form.last_name.data
         # push validated data to database
         user = Users.register(username, password, email, first_name, last_name)
+        
         db.session.commit()
         session['username'] = user.username
         
@@ -48,7 +49,7 @@ def user_dashboard(username):
     if "username" not in session or username != session['username']:
         raise Unauthorized()
 
-    user = Users.query.get_or_404(session['user_id'])
+    user = Users.query.filter_by(username=username).first()
     return render_template('/users/dashboard.html', user=user)
 
 @app.route('/login', methods=['GET', 'POST'])   
@@ -69,7 +70,14 @@ def login():
             return redirect(f'/users/{user.username}')
         else:
             form.username.errors = ['Invalid username/password']
+            return render_template('/users/login.html', form=form)
     return render_template('/users/login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    session.pop('username')
+    return redirect('/')
+
 
 
 if __name__ == '__main__':
