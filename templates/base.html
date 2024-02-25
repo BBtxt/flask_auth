@@ -19,13 +19,13 @@
           <div class="flex items-center -mx-2">
             <a
               class="mx-2 text-gray-800 hover:text-gray-600"
-              href=""
+              href="/"
               >Home</a
             >
-            <a
+            <a 
               class="mx-2 text-gray-800 hover:text-gray-600"
-              href=""
-              >Contact</a
+              href="/register"
+              >Register</a
             >
             <a
               class="mx-2 text-gray-800 hover:text-gray-600"
@@ -36,6 +36,6 @@
         </div>
       </div>
     </nav>
-    <div>{% block content %}{% endblock %}</div>
+    <div class="flex flex-col justify-center items-center min-h-screen">{% block content %}{% endblock %}</div>
   </body>
 </html>
